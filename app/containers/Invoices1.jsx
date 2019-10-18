@@ -9,7 +9,6 @@ import { translate } from 'react-i18next';
 import Pagination from 'react-js-pagination';
 // Actions
 import * as Actions from '../actions/invoices';
-import styles from "./Invoices1.scss";
 
 // Selectors
 import { getInvoices } from '../reducers/InvoicesReducer';
