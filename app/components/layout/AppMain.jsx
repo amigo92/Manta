@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 // Custom Components
 import Form from '../../containers/Form';
-import Invoices from '../../containers/Invoices';
+import Invoices1 from '../../containers/Invoices1';
 import Contacts from '../../containers/Contacts';
 import Settings from '../../containers/Settings';
 
@@ -21,7 +21,7 @@ class AppMain extends Component {
     return (
       <AppMainContent>
         {activeTab === 'form' && <Form />}
-        {activeTab === 'invoices' && <Invoices />}
+        {activeTab === 'invoices' && <Invoices1 />}
         {activeTab === 'contacts' && <Contacts />}
         {activeTab === 'settings' && <Settings />}
       </AppMainContent>
