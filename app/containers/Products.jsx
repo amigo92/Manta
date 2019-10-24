@@ -9,9 +9,9 @@ import { translate } from 'react-i18next';
 
 // Actions
 import * as ProductsActions from '../actions/products';
-
 // Components
 import Product from '../components/products/Product';
+import NewProduct from '../components/form/NewProduct';
 import Message from '../components/shared/Message';
 import { Table, THead, TBody, TH, TR } from '../components/shared/Table';
 import _withFadeInAnimation from '../components/shared/hoc/_withFadeInAnimation';
@@ -82,6 +82,9 @@ class Products extends PureComponent {
           <PageHeaderTitle>All Products</PageHeaderTitle>
         </PageHeader>
         <PageContent>
+          <div style={{paddingBottom:'30px'}}>
+            <NewProduct />
+          </div>
           {products.length === 0 ? (
             <Message info text='No Products to show, Please add some.' />
           ) : (

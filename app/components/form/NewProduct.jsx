@@ -7,8 +7,9 @@ import { translate } from 'react-i18next';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as Actions from '../../actions/form.jsx';
+import * as Actions from '../../actions/products.jsx';
 import { getRows } from '../../reducers/FormReducer';
+import uuidv4 from 'uuid/v4';
 
 // DragNDrop
 import TransitionList from '../../components/shared/TransitionList';
@@ -60,28 +61,44 @@ const ItemsListDiv = styled.div`
 
 // Component
 export class ItemsList extends PureComponent {
+    constructor() { 
+        super();
+        this.state = {
+            item: {_id:uuidv4()}
+        }
+        this.updateItem = this.updateItem.bind(this)
+        this.addItem = this.addItem.bind(this)
+    }
   componentDidMount() {
     const { rows, boundActionCreators } = this.props;
     if (!rows.length) {
       boundActionCreators.addItem();
     }
   }
+    updateItem(item) { 
+        this.setState({item})
+    }
+    addItem() { 
+        const { saveProduct } = this.props.boundActionCreators;
+        saveProduct(this.state.item);
+        this.setState({            item: {_id:uuidv4()}    })
+    }
 
   render() {
     // Bound Actions
     const { addItem, removeItem, updateItem } = this.props.boundActionCreators;
     // Item Rows
-    const { t, rows } = this.props;
+      const { t } = this.props;
+    const rows = [ this.state.item ]
     const rowsComponent = rows.map((item, index) => (
       <NewProductRow
-        key={item.id}
+        key={item._id}
         item={item}
         t={t}
         hasHandler={rows.length > 1}
         actions={index !== 0}
-        updateRow={updateItem}
-        removeRow={removeItem}
-        addItem={addItem}
+        updateRow={this.updateItem}
+        addItem={this.addItem}
       />
     ));
 
@@ -98,8 +115,8 @@ export class ItemsList extends PureComponent {
             </TransitionList>
           </ItemsListDiv>
           <div className="itemsListActions">
-            <ItemsListActionsBtn primary onClick={addItem}>
-              {t('form:fields:items:add')}
+            <ItemsListActionsBtn primary onClick={this.addItem}>
+              Add Product to Database
             </ItemsListActionsBtn>
           </div>
         </ItemsListWrapper>

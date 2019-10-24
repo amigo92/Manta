@@ -54,7 +54,7 @@ const ItemRemoveBtn = styled.a`
 `;
 
 // Component
-export class ItemRow extends Component {
+export class NewProductRow extends Component {
   constructor(props) {
     super(props);
     this.handleTextInputChange = this.handleTextInputChange.bind(this);
@@ -64,9 +64,9 @@ export class ItemRow extends Component {
   }
 
   componentWillMount() {
-    const { id, description, price } = this.props.item;
+    const { _id, description, price } = this.props.item;
     this.setState({
-      id,
+      _id,
       description: description || '',
       price: price || '',
     });
@@ -90,6 +90,9 @@ export class ItemRow extends Component {
     const name = event.target.name;
     const eValue = event.target.value;
     const value = eValue === '' ? '' : parseFloat(eValue);
+    this.setState({ price:value }, () => {
+      this.uploadRowState();
+    });
     // this.setState({ [name]: value }, () => {
     //   this.updateSubtotal();
     // });
@@ -135,14 +138,13 @@ export class ItemRow extends Component {
   }
 }
 
-ItemRow.propTypes = {
+NewProductRow.propTypes = {
   actions: PropTypes.bool.isRequired,
   addItem: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   hasHandler: PropTypes.bool.isRequired,
   item: PropTypes.object.isRequired,
-  removeRow: PropTypes.func.isRequired,
   updateRow: PropTypes.func.isRequired,
 };
 
-export default compose(_withDraggable)(ItemRow);
+export default compose(_withDraggable)(NewProductRow);
