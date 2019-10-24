@@ -35,6 +35,11 @@ const allTabs = [
     icon: 'ion-person-stalker',
   },
   {
+    title: 'Products',
+    name: 'products',
+    icon: 'ion-android-color-palette',
+  },
+  {
     title: 'Settings',
     name: 'settings',
     icon: 'ion-ios-gear',
@@ -78,6 +83,7 @@ export const Icon = styled.i`
   ${props => props.id === 'form' && `color: #6bbb69;`};
   ${props => props.id === 'contacts' && `color: #469fe5;`};
   ${props => props.id === 'settings' && `color: #C4C8CC;`};
+  ${props => props.id === 'products' && `color: #C4e8CC;`};
   ${props => props.id === 'invoices' && `color: #cbc189;`};
 `;
 

@@ -36,6 +36,12 @@ export const CONTACT_GET_ALL = 'CONTACT_GET_ALL';
 export const CONTACT_DELETE = 'CONTACT_DELETE';
 export const CONTACT_SAVE = 'CONTACT_SAVE';
 
+// PRODUCTS
+// ===========================================================
+export const PRODUCT_GET_ALL = 'PRODUCT_GET_ALL';
+export const PRODUCT_DELETE = 'PRODUCT_DELETE';
+export const PRODUCT_SAVE = 'PRODUCT_SAVE';
+
 // SETTINGS
 // ===========================================================
 export const SETTINGS_SAVE = 'SETTINGS_SAVE';

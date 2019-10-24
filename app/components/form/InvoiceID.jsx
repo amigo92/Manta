@@ -33,6 +33,9 @@ export class InvoiceID extends PureComponent {
     if (nextProps.invoiceID === "") {
       this.setState({ invoiceID: "" });
     }
+    else { 
+      this.setState({ invoiceID: nextProps.invoiceID })
+    }
   }
 
   handleInputChange(event) {

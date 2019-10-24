@@ -7,6 +7,7 @@ const openDialog = require('../renderers/dialog.js');
 const ipc = require('electron').ipcRenderer;
 import { translate } from 'react-i18next';
 import Pagination from 'react-js-pagination';
+import SearchField from "react-search-field";
 // Actions
 import * as Actions from '../actions/invoices';
 
@@ -32,12 +33,16 @@ export class Invoices extends PureComponent {
     this.state = {
       filter: null,
       activePage: 1,
+      searchText: '',
     };
     this.editInvoice = this.editInvoice.bind(this);
     this.deleteInvoice = this.deleteInvoice.bind(this);
     this.duplicateInvoice = this.duplicateInvoice.bind(this);
     this.setInvoiceStatus = this.setInvoiceStatus.bind(this);
     this.setFilter = this.setFilter.bind(this);
+    this.paginate = this.paginate.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
   }
   handlePageChange(pageNumber) {
     console.log(`active page is ${pageNumber}`);
@@ -104,17 +109,36 @@ export class Invoices extends PureComponent {
     const page = page_number - 1; // because pages logically start with 1, but technically with 0
     return array.slice(page * page_size, (page + 1) * page_size);
   }
-
+  onChange(value, event) { 
+    console.log('onchange')
+    console.log(value)
+    console.log(event)
+    if (value == '') {
+      this.setState({searchText: ''})
+    }
+  }
+  onSearchSubmit(value) { 
+    console.log('search submit')
+    console.log(value)
+    this.setState({searchText: value})
+  }
   // Render
   render() {
     const { dateFormat, invoices, t } = this.props;
-    const { filter } = this.state;
+    const { filter, searchText } = this.state;
     const filteredInvoices = filter
-      ? invoices.filter(invoice => invoice.status === filter)
-      : invoices;
+      ? invoices.filter(invoice => {
+        const isFilterTrue = invoice.status === filter
+        const includesSearchText = JSON.stringify(invoice).includes(searchText)
+        return isFilterTrue && includesSearchText
+      })
+      : invoices.filter(invoice => {
+        const includesSearchText = JSON.stringify(invoice).includes(searchText)
+        return includesSearchText
+      });
     const paginatedInvoices = this.paginate(
       filteredInvoices,
-      1,
+      4,
       this.state.activePage
     );
     const invoicesComponent = paginatedInvoices.map((invoice, index) => (
@@ -142,19 +166,29 @@ export class Invoices extends PureComponent {
         {t(`invoices:status:${status}`)}
       </Button>
     ));
-
+    
     return (
       <PageWrapper>
         <PageHeader>
           <PageHeaderTitle>{t('invoices:header:name')}</PageHeaderTitle>
           <PageHeaderActions>
             <div
+              style={{ alignSelf: 'center', marginRight: 20 }}
+            >
+              <SearchField
+                placeholder="Search..."
+                onChange={this.onChange}
+                classNames="test-class"
+                onSearchClick={this.onSearchSubmit}
+              />
+            </div>
+            <div
               style={{ alignSelf: 'center', marginTop: 15, marginRight: 20 }}
             >
               <Pagination
                 activePage={this.state.activePage}
-                itemsCountPerPage={1}
-                totalItemsCount={invoices.length}
+                itemsCountPerPage={4}
+                totalItemsCount={filteredInvoices.length}
                 innerClass='pagination'
                 itemClass='itemClass'
                 activeLinkClass='activeItemClass'
