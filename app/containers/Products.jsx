@@ -93,6 +93,7 @@ class Products extends PureComponent {
                 <TR>
                   <TH>Description</TH>
                   <TH>Price</TH>
+                  <TH>Distance</TH>
                   <TH actions>{t('contacts:fields:actions')}</TH>
                 </TR>
               </THead>

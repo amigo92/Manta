@@ -19,7 +19,7 @@ import { getInvoiceData, validateFormData } from '../helpers/form';
 const FormMW = ({ dispatch, getState }) => next => action => {
   switch (action.type) {
     case ACTION_TYPES.FORM_SAVE: {
-      const currentFormData = getState().form;
+      const currentFormData = { ...getState().form, rows:getState().form.rows.filter(f => f.description != '') };
       // Validate Form Data
       if (!validateFormData(currentFormData)) return;
       const currentInvoiceData = getInvoiceData(currentFormData);
@@ -44,9 +44,24 @@ const FormMW = ({ dispatch, getState }) => next => action => {
     }
 
     case ACTION_TYPES.FORM_ITEM_ADD: {
+      const form = getState().form
+      const rows = form.rows
+      form.subtotal = 0
+      form.grandTotal = 0
+      if (rows.length > 0) {
+        for (var i = 0; i < rows.length; i++) { 
+          rows[i].subtotal = + rows[i].quantity * rows[i].price;
+          form.grandTotal =+ rows[i].quantity*rows[i].price;
+          if (rows[i].description === action.payload.description) { 
+            const newRow = {...rows[i], quantity: rows[i].quantity + 1}
+            dispatch(FormActions.updateItem(newRow));
+            return
+          }
+        }
+      }
       return next(
         Object.assign({}, action, {
-          payload: { id: uuidv4() },
+          payload: { id: action.payload && action.payload._id ?  action.payload._id : uuidv4(), description:action.payload && action.payload.description ?  action.payload.description : "", price:action.payload && action.payload.price ?  action.payload.price : "", quantity: action.payload && action.payload.quantity ?  action.payload.quantity : "" },
         })
       );
     }

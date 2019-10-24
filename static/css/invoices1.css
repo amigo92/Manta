@@ -30,3 +30,19 @@
   background-color: #469fe5;
   color: #ffffff !important;
 }
+.inRow {
+  flex-direction: row;
+  display: inline-flex;
+  margin-left: 40px;
+  margin-bottom: 40px;
+}
+.inRower {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+  border-color: #469fe5;
+  border-width: 1px;
+  border-style: solid;
+}

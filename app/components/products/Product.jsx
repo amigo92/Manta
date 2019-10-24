@@ -24,6 +24,7 @@ class Contact extends PureComponent {
       <TR>
         <TD bold>{product.description}</TD>
         <TD>{product.price}</TD>
+        <TD>{product.distance}</TD>
         <TD actions>
           <Button link danger onClick={this.deleteProduct}>
             <i className="ion-close-circled" />
@@ -35,8 +36,6 @@ class Contact extends PureComponent {
 }
 
 Contact.propTypes = {
-  contact: PropTypes.object.isRequired,
-  deleteContact: PropTypes.func.isRequired,
 };
 
 export default Contact;

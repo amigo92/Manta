@@ -58,17 +58,20 @@ export class NewProductRow extends Component {
   constructor(props) {
     super(props);
     this.handleTextInputChange = this.handleTextInputChange.bind(this);
-    this.handleNumberInputChange = this.handleNumberInputChange.bind(this);
+    this.handleDistanceInputChange = this.handleDistanceInputChange.bind(this);
+    this.handlePriceInputChange = this.handlePriceInputChange.bind(this);
+
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.uploadRowState = this.uploadRowState.bind(this);
   }
 
   componentWillMount() {
-    const { _id, description, price } = this.props.item;
+    const { _id, description, price, distance } = this.props.item;
     this.setState({
       _id,
       description: description || '',
       price: price || '',
+      distance: distance || ''
     });
   }
 
@@ -86,7 +89,7 @@ export class NewProductRow extends Component {
     });
   }
 
-  handleNumberInputChange(event) {
+  handlePriceInputChange(event) {
     const name = event.target.name;
     const eValue = event.target.value;
     const value = eValue === '' ? '' : parseFloat(eValue);
@@ -97,7 +100,17 @@ export class NewProductRow extends Component {
     //   this.updateSubtotal();
     // });
   }
-
+  handleDistanceInputChange(event) {
+    const name = event.target.name;
+    const eValue = event.target.value;
+    const value = eValue === '' ? '' : parseFloat(eValue);
+    this.setState({ distance:value }, () => {
+      this.uploadRowState();
+    });
+    // this.setState({ [name]: value }, () => {
+    //   this.updateSubtotal();
+    // });
+  }
   uploadRowState() {
     const { updateRow } = this.props;
     updateRow(this.state);
@@ -128,9 +141,20 @@ export class NewProductRow extends Component {
             type="number"
             step="0.01"
             value={this.state.price}
-            onChange={this.handleNumberInputChange}
+            onChange={this.handlePriceInputChange}
             onKeyDown={this.handleKeyDown}
             placeholder={t('form:fields:items:price')}
+          />
+        </div>
+        <div className="flex1">
+          <ItemDivInput
+            name="distance"
+            type="number"
+            step="0.01"
+            value={this.state.distance}
+            onChange={this.handleDistanceInputChange}
+            onKeyDown={this.handleKeyDown}
+            placeholder='Distance'
           />
         </div>
       </ItemDiv>

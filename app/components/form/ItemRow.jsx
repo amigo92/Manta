@@ -75,6 +75,16 @@ export class ItemRow extends Component {
       subtotal: subtotal || '',
     });
   }
+  componentWillReceiveProps(nextProps) {
+    const { id, description, quantity, price, subtotal } = nextProps.item;
+    this.setState({
+      id,
+      description: description || '',
+      price: price || '',
+      quantity: quantity || '',
+      subtotal: subtotal || '',
+    })
+  }
 
   handleKeyDown(e) {
     if (e.which === 13) {

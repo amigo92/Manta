@@ -60,11 +60,15 @@ const ItemsListDiv = styled.div`
 
 // Component
 export class ItemsList extends PureComponent {
+  constructor(props) {
+    super(props);
+  }
   componentDidMount() {
     const { rows, boundActionCreators } = this.props;
     if (!rows.length) {
       boundActionCreators.addItem();
     }
+    this.props.onRef(this.props.boundActionCreators.addItem);
   }
 
   render() {
@@ -111,6 +115,7 @@ export class ItemsList extends PureComponent {
 ItemsList.propTypes = {
   boundActionCreators: PropTypes.object.isRequired,
   rows: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onRef: PropTypes.func
 };
 
 const mapStateToProps = state => ({

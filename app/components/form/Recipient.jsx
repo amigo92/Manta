@@ -123,7 +123,7 @@ export class Recipient extends Component {
       <Section>
         <label className="itemLabel">{t('form:fields:recipient:name')} *</label>
         {this.renderComponent()}
-        {contacts.length > 0 ? (
+        {/*contacts.length > 0 ? (
           <div>
             <div className="radio">
               <label>
@@ -148,7 +148,7 @@ export class Recipient extends Component {
               </label>
             </div>
           </div>
-        ) : null}
+        ) : null*/}
       </Section>
     );
   }

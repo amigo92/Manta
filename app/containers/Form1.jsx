@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { getCurrentInvoice } from '../reducers/FormReducer';
 import { translate } from 'react-i18next';
 import { getInvoices } from '../reducers/InvoicesReducer';
+import { getProducts } from '../reducers/ProductsReducer';
 
 // Actions
 import * as FormActions from '../actions/form';
@@ -97,13 +98,22 @@ class Form extends PureComponent {
           />
           {required_fields.invoiceID && (
             <InvoiceID
-                        t={t}
-                        invoiceID={invoiceID}
-                        updateFieldData={updateFieldData}
+              t={t}
+              invoiceID={invoiceID}
+              updateFieldData={updateFieldData}
             />
           )}
           <Recipient />
-          <ItemsList />
+          <div className="inRow">
+            {this.props.products.map(p => (<div onClick={() => { 
+              let product = p;
+              product.quantity = 1
+              this.itemList(product)
+            }} className="inRower" key={p._id}>
+              {p.description}
+                    </div>))}
+          </div>
+          <ItemsList onRef={(ref) => { this.itemList = ref}}/>
           {required_fields.dueDate && (
             <DueDate
               t={t}
@@ -177,8 +187,10 @@ Form.propTypes = {
 
 // Map state & dispatch to props
 const mapStateToProps = state => ({
-    currentInvoice: getCurrentInvoice(state),
-    invoices: getInvoices(state),
+  currentInvoice: getCurrentInvoice(state),
+  invoices: getInvoices(state),
+  products: getProducts(state),
+  rows: state.form.rows
 });
 
 const mapDispatchToProps = dispatch => ({
