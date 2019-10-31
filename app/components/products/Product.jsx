@@ -7,7 +7,7 @@ import { TR, TD } from '../shared/Table';
 import Button from '../shared/Button';
 
 // Component
-class Contact extends PureComponent {
+class Product extends PureComponent {
   constructor(props) {
     super(props);
     this.deleteProduct = this.deleteProduct.bind(this);
@@ -23,6 +23,7 @@ class Contact extends PureComponent {
     return (
       <TR>
         <TD bold>{product.description}</TD>
+        <TD>{product.isReel}</TD>
         <TD>{product.price}</TD>
         <TD>{product.distance}</TD>
         <TD actions>
@@ -35,7 +36,7 @@ class Contact extends PureComponent {
   }
 }
 
-Contact.propTypes = {
+Product.propTypes = {
 };
 
-export default Contact;
+export default Product;

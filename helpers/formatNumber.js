@@ -29,13 +29,16 @@ function replaceSeparators(number, decimalSeparator, thousandsSeparator) {
 }
 
 function formatNumber(number, fraction, separator) {
+  if (!number) { 
+    return number
+  }
   const defaultFormattedNumber = number.toLocaleString('en', {
     minimumFractionDigits: fraction,
     maximumFractionDigits: fraction,
   });
   const separatorFormat = setSeparator(separator);
   const formattedNumber = replaceSeparators(
-    defaultFormattedNumber,
+  defaultFormattedNumber,
     separatorFormat.decimal,
     separatorFormat.thousand
   );

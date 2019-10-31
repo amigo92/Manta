@@ -31,10 +31,14 @@ export class InvoiceID extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.invoiceID === "") {
-      this.setState({ invoiceID: "" });
+      this.setState({ invoiceID: "" }, () => {
+        this.props.updateFieldData('invoiceID', "");
+      });
     }
-    else { 
-      this.setState({ invoiceID: nextProps.invoiceID })
+    else if (this.state.invoiceID !== nextProps.invoiceID) { 
+      this.setState({ invoiceID: nextProps.invoiceID }, () => {
+        this.props.updateFieldData('invoiceID', nextProps.invoiceID);
+      })
     }
   }
 

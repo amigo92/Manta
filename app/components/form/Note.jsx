@@ -20,18 +20,20 @@ const NoteContent = styled.textarea`
   color: #3a3e42;
   font-size: 14px;
 `;
-
+const NoteText = `By accepting this memo, you accept our Terms and Conditions.
+Delivery will only be given to the holder of this memo.`
 // Component
 export class Note extends Component {
   constructor(props) {
     super(props);
-    this.state = { content: this.props.note.content };
+    this.state = {
+      content: NoteText};
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.note.content === undefined) {
-      this.setState({ content: '' }, () => {
+      this.setState({ content: NoteText }, () => {
         this.props.updateFieldData('note', this.state);
       });
     }

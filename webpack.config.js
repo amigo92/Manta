@@ -77,7 +77,7 @@ const commonConfig = merge([
     emitError: true,
   }),
   // Separate source map from bundles
-  parts.generateSourceMaps({ type: 'none' }),
+  parts.generateSourceMaps({ type: 'source-map' }),
   {
     target: 'electron-renderer',
     // Set Performance Budget

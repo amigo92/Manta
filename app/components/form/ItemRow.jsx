@@ -2,13 +2,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
+import Select from 'react-select';
+import chroma from 'chroma-js';
+import { colourOptions } from './data';
 
 // HOCs
-import _withDraggable from './hoc/_withDraggable';
+import _withDraggable from './hoc/_withDraggable';  
 
 // Styles
 import styled from 'styled-components';
-
+const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' },
+];
 const ItemDiv = styled.div`
   position: relative;
   display: flex;
@@ -37,7 +44,54 @@ const ItemDivInput = styled.input`
   color: #3a3e42;
   font-size: 14px;
 `;
+const dot = (color = '#ccc') => ({
+  alignItems: 'center',
+  display: 'flex',
+  width: '100%',
+  ':before': {
+    backgroundColor: color,
+    borderRadius: 10,
+    content: '" "',
+    display: 'block',
+    marginRight: 8,
+    height: 0,
+    width: 0,
+  },
+});
 
+const colourStyles = {
+  container: styles => ({ ...styles, width:'100%' }),
+  control: styles => ({ ...styles, backgroundColor: 'white', width:'100%', height: '36px'}),
+  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    const color = chroma('#666666');
+    return {
+      ...styles,
+      backgroundColor: isDisabled
+        ? null
+        : isSelected
+        ? '#666666'
+        : isFocused
+        ? color.alpha(0.1).css()
+        : null,
+      color: isDisabled
+        ? '#ccc'
+        : isSelected
+        ? chroma.contrast(color, 'white') > 2
+          ? 'white'
+          : 'black'
+        : '#666666',
+      cursor: isDisabled ? 'not-allowed' : 'default',
+
+      ':active': {
+        ...styles[':active'],
+        backgroundColor: !isDisabled && (isSelected ? '#666666' : color.alpha(0.3).css()),
+      },
+    };
+  },
+  input: styles => ({ ...styles, ...dot(), width:'100%' }),
+  placeholder: styles => ({ ...styles, ...dot() }),
+  singleValue: (styles, { data }) => ({ ...styles, ...dot('#666666') }),
+};
 const ItemActions = styled.div`
   display: flex !important;
   align-items: center;
@@ -55,6 +109,19 @@ const ItemRemoveBtn = styled.a`
 
 // Component
 export class ItemRow extends Component {
+  state = {
+    selectedOption: null,
+  };
+  handleChange = selectedOption => {
+    const product = this.props.products.filter(pr => pr.description == selectedOption.label);
+    const quantity = this.state.description == selectedOption.label ? (this.state.quantity === '' ? 0 : parseFloat(this.state.quantity)) + 1 : 1
+    product.length > 0 && this.setState(
+      { selectedOption, description: selectedOption.label, price: product[0].price, quantity: quantity },
+      () => {
+        this.updateSubtotal();
+      }
+    );
+  };
   constructor(props) {
     super(props);
     this.handleTextInputChange = this.handleTextInputChange.bind(this);
@@ -135,6 +202,8 @@ export class ItemRow extends Component {
   }
 
   render() {
+    const { selectedOption } = this.state;
+
     const { t, actions, hasHandler } = this.props;
     return (
       <ItemDiv>
@@ -143,17 +212,16 @@ export class ItemRow extends Component {
             <i className="ion-grid" />
           </div>
         )}
-        <div className="flex3">
-          <ItemDivInput
-            name="description"
-            type="text"
-            value={this.state.description}
-            onChange={this.handleTextInputChange}
-            onKeyDown={this.handleKeyDown}
-            placeholder={t('form:fields:items:description')}
-          />
-        </div>
-
+        <div className="flex1" style = {{'width':'100%'}}>
+        <Select
+            value={selectedOption}
+            styles={colourStyles}
+        onChange={this.handleChange}
+            options={this.props.products.map(p => { 
+              return {label: p.description, value:p.description}
+            })}
+        />
+      </div>
         <div className="flex1">
           <ItemDivInput
             name="price"
@@ -198,6 +266,7 @@ ItemRow.propTypes = {
   t: PropTypes.func.isRequired,
   hasHandler: PropTypes.bool.isRequired,
   item: PropTypes.object.isRequired,
+  products: PropTypes.array,
   removeRow: PropTypes.func.isRequired,
   updateRow: PropTypes.func.isRequired,
 };

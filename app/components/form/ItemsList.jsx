@@ -81,6 +81,7 @@ export class ItemsList extends PureComponent {
         key={item.id}
         item={item}
         t={t}
+        products={this.props.products}
         hasHandler={rows.length > 1}
         actions={index !== 0}
         updateRow={updateItem}
@@ -121,6 +122,7 @@ ItemsList.propTypes = {
 const mapStateToProps = state => ({
   formState: state.form, // Make drag & drop works
   rows: getRows(state),
+  products: state.products
 });
 
 const mapDispatchToProps = dispatch => ({

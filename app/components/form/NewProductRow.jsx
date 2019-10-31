@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
+import Switch from '../shared/Switch';
 
 // HOCs
 import _withDraggable from './hoc/_withDraggable';
@@ -63,13 +64,22 @@ export class NewProductRow extends Component {
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.uploadRowState = this.uploadRowState.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  // Update local state
+  handleInputChange(event) {
+    this.setState({
+     isReel: 'yes'
+    });
   }
 
   componentWillMount() {
-    const { _id, description, price, distance } = this.props.item;
+    const { _id, description, isReel, price, distance } = this.props.item;
     this.setState({
       _id,
       description: description || '',
+      isReel: isReel || '',
       price: price || '',
       distance: distance || ''
     });
@@ -134,6 +144,16 @@ export class NewProductRow extends Component {
             onKeyDown={this.handleKeyDown}
             placeholder={t('form:fields:items:description')}
           />
+        </div>
+        <div className="flex3">
+        <ItemDivInput
+        name="reel"
+        type="text"
+        value={this.state.isReel}
+        onChange={this.handleInputChange}
+        onKeyDown={this.handleKeyDown}
+        placeholder='is it a Reel type? (yes/no)'
+      />
         </div>
         <div className="flex1">
           <ItemDivInput

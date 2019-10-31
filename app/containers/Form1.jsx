@@ -35,6 +35,7 @@ import {
 
 // Component
 class Form extends PureComponent {
+
   render() {
     // Form & Settings Actions
     const { updateSettings } = this.props.boundSettingsActionCreators;
@@ -56,13 +57,16 @@ class Form extends PureComponent {
       settings,
       savedSettings,
     } = this.props.currentInvoice;
-      let invoiceID = this.props.currentInvoice.invoiceID
+    let invoiceID = this.props.currentInvoice.invoiceID
+    const sortedInvoices = this.props.invoices.sort((a, b) => { return a.invoiceID - b.invoiceID > 0 ? 1 : -1})
       if (invoiceID == "") { 
-          invoiceID = String(this.props.invoices.length > 0 ? Number(this.props.invoices[0].invoiceID) + 1 : 1000)
+          invoiceID = String(sortedInvoices.length > 0 ? Number(sortedInvoices[sortedInvoices.length - 1].invoiceID) + 1 : 1000)
       }
     const { required_fields, open, editMode } = settings;
     // Translation
     const { t } = this.props;
+    const pr = this.props.products.sort((a,b) => { return a.description.split(' ')[0] - b.description.split(' ')[0] > 0 ? 1 : -1 }
+    )
     return (
       <PageWrapper>
         <PageHeader>
@@ -104,15 +108,7 @@ class Form extends PureComponent {
             />
           )}
           <Recipient />
-          <div className="inRow">
-            {this.props.products.map(p => (<div onClick={() => { 
-              let product = p;
-              product.quantity = 1
-              this.itemList(product)
-            }} className="inRower" key={p._id}>
-              {p.description}
-                    </div>))}
-          </div>
+         
           <ItemsList onRef={(ref) => { this.itemList = ref}}/>
           {required_fields.dueDate && (
             <DueDate

@@ -90,6 +90,7 @@ function getInvoiceData(formData) {
 
 // VALIDATION RULES
 function validateRecipient(recipient) {
+  return true
   if (recipient.newRecipient === true) {
     // Is Recipient Form Data Empty?
     if (isEmpty(recipient.new)) {
