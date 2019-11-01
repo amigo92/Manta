@@ -65,8 +65,8 @@ class Form extends PureComponent {
     const { required_fields, open, editMode } = settings;
     // Translation
     const { t } = this.props;
-    const pr = this.props.products.sort((a,b) => { return a.description.split(' ')[0] - b.description.split(' ')[0] > 0 ? 1 : -1 }
-    )
+    // const pr = this.props.products.sort((a,b) => { return a.description.split(' ')[0] - b.description.split(' ')[0] > 0 ? 1 : -1 }
+    // )
     return (
       <PageWrapper>
         <PageHeader>

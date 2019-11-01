@@ -40,6 +40,11 @@ const allTabs = [
     icon: 'ion-android-color-palette',
   },
   {
+    title: 'List',
+    name: 'list',
+    icon: 'ion-ios-list',
+  },
+  {
     title: 'Settings',
     name: 'settings',
     icon: 'ion-ios-gear',
@@ -84,6 +89,7 @@ export const Icon = styled.i`
   ${props => props.id === 'contacts' && `color: #469fe5;`};
   ${props => props.id === 'settings' && `color: #C4C8CC;`};
   ${props => props.id === 'products' && `color: #C4e8CC;`};
+  ${props => props.id === 'list' && `color: #9A380C;`};
   ${props => props.id === 'invoices' && `color: #cbc189;`};
 `;
 

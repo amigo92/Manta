@@ -115,8 +115,46 @@ export class ItemRow extends Component {
   handleChange = selectedOption => {
     const product = this.props.products.filter(pr => pr.description == selectedOption.label);
     const quantity = this.state.description == selectedOption.label ? (this.state.quantity === '' ? 0 : parseFloat(this.state.quantity)) + 1 : 1
+    const invoicesLength = this.props.invoices.length
+    let firkiNo
+    let shouldBreak = false
+    const reelProducts = this.props.products.filter(pr => pr.isReel && pr.isReel.toLowerCase() === 'yes');
+    if (reelProducts.filter(rP => rP.description == selectedOption.label).length > 0) {
+      if (this.props.rows.filter(r => r.firkino && r.firkino != '').length > 0) {
+        for (var j = this.props.rows.length - 1; j >= 0; j--) {
+          const rw = this.props.rows[j]
+          if (rw.firkino && rw.firkino != '') {
+            firkiNo = rw.firkino
+            shouldBreak = true
+            break;
+          }
+        }
+      }
+      else {
+        for (var i = invoicesLength - 1; i >= 0; i--) {
+          if (shouldBreak)
+            break
+          const inv = this.props.invoices[i]
+          for (var j = inv.rows.length - 1; j >= 0; j--) {
+            const rw = inv.rows[j]
+            if (rw.description == reelProducts[0].description && rw.firkino != '') {
+              firkiNo = rw.firkino
+              shouldBreak = true
+              break;
+            }
+          }
+        }
+      }
+      if (firkiNo) {
+        firkiNo += 1
+      }
+      else { 
+        firkiNo = 1
+      }
+      console.log(firkiNo)
+  }
     product.length > 0 && this.setState(
-      { selectedOption, description: selectedOption.label, price: product[0].price, quantity: quantity },
+      { selectedOption, description: selectedOption.label, price: product[0].price, quantity: quantity, firkino: firkiNo || '' },
       () => {
         this.updateSubtotal();
       }
@@ -130,29 +168,46 @@ export class ItemRow extends Component {
     this.updateSubtotal = this.updateSubtotal.bind(this);
     this.uploadRowState = this.uploadRowState.bind(this);
     this.removeRow = this.removeRow.bind(this);
+    this.focusFirstField = this.focusFirstField.bind(this);
   }
 
   componentWillMount() {
-    const { id, description, quantity, price, subtotal } = this.props.item;
+    const { id, description, quantity, price, firkino, subtotal } = this.props.item;
+    this.props.onRef(this)
+    const options = this.props.products.map(p => { 
+      return {label: p.description, value:p.description}
+    })
+    const selectedOption = options.filter(op => op.label == description)
     this.setState({
       id,
+      selectedOption: selectedOption.length > 0 ? selectedOption[0] : null,
       description: description || '',
       price: price || '',
       quantity: quantity || '',
+      firkino: firkino || '',
       subtotal: subtotal || '',
     });
   }
   componentWillReceiveProps(nextProps) {
-    const { id, description, quantity, price, subtotal } = nextProps.item;
+    const { id, description, quantity, price, firkino, subtotal } = nextProps.item;
+
+    const options = this.props.products.map(p => { 
+      return {label: p.description, value:p.description}
+    })
+    const selectedOption = options.filter(op => op.label == description)
     this.setState({
       id,
+      selectedOption: selectedOption.length > 0 ? selectedOption[0] : null,
       description: description || '',
       price: price || '',
       quantity: quantity || '',
+      firkino: firkino || '',
       subtotal: subtotal || '',
     })
   }
-
+  focusFirstField() {
+    this.nameInput.focus()
+  }
   handleKeyDown(e) {
     if (e.which === 13) {
       this.props.addItem();
@@ -215,11 +270,23 @@ export class ItemRow extends Component {
         <div className="flex1" style = {{'width':'100%'}}>
         <Select
             value={selectedOption}
+            ref={(input) => { this.nameInput = input; }} 
             styles={colourStyles}
         onChange={this.handleChange}
             options={this.props.products.map(p => { 
               return {label: p.description, value:p.description}
             })}
+        />
+        </div>
+        <div className="flex1">
+        <ItemDivInput
+            name="firkino"
+            readOnly
+            type="number"
+            value={this.state.firkino}
+            onChange={this.handleNumberInputChange}
+            onKeyDown={this.handleKeyDown}
+            placeholder={'Firki No'}
         />
       </div>
         <div className="flex1">
@@ -238,10 +305,11 @@ export class ItemRow extends Component {
           <ItemDivInput
             name="quantity"
             type="number"
-            step="0.01"
+            step="1"
             value={this.state.quantity}
             onChange={this.handleNumberInputChange}
             onKeyDown={this.handleKeyDown}
+            readOnly={this.props.products.filter(pr => this.state.description == pr.description && pr.isReel == 'yes').length > 0}
             placeholder={t('form:fields:items:quantity')}
           />
         </div>
@@ -267,6 +335,8 @@ ItemRow.propTypes = {
   hasHandler: PropTypes.bool.isRequired,
   item: PropTypes.object.isRequired,
   products: PropTypes.array,
+  invoices: PropTypes.array,
+  rows: PropTypes.arrayOf(PropTypes.object).isRequired,
   removeRow: PropTypes.func.isRequired,
   updateRow: PropTypes.func.isRequired,
 };

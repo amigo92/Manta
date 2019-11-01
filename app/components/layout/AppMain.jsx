@@ -25,6 +25,7 @@ class AppMain extends Component {
         {activeTab === 'invoices' && <Invoices />}
         {activeTab === 'contacts' && <Contacts />}
         {activeTab === 'products' && <Products />}
+        {activeTab === 'list' && <Products />}
         {activeTab === 'settings' && <Settings />}
       </AppMainContent>
     );

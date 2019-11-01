@@ -52,7 +52,7 @@ const FormMW = ({ dispatch, getState }) => next => action => {
         for (var i = 0; i < rows.length; i++) { 
           rows[i].subtotal = + rows[i].quantity * rows[i].price;
           form.grandTotal =+ rows[i].quantity*rows[i].price;
-          if (rows[i].description === action.payload.description) { 
+          if (action && action.payload && rows[i].description === action.payload.description) { 
             const newRow = {...rows[i], quantity: rows[i].quantity + 1}
             dispatch(FormActions.updateItem(newRow));
             return

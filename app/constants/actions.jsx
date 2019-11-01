@@ -42,6 +42,12 @@ export const PRODUCT_GET_ALL = 'PRODUCT_GET_ALL';
 export const PRODUCT_DELETE = 'PRODUCT_DELETE';
 export const PRODUCT_SAVE = 'PRODUCT_SAVE';
 
+// LIST
+// ===========================================================
+export const LIST_GET_ALL = 'PRODUCT_GET_ALL';
+export const LIST_DELETE = 'PRODUCT_DELETE';
+export const LIST_SAVE = 'PRODUCT_SAVE';
+
 // SETTINGS
 // ===========================================================
 export const SETTINGS_SAVE = 'SETTINGS_SAVE';

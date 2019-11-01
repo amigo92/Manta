@@ -62,6 +62,12 @@ const ItemsListDiv = styled.div`
 export class ItemsList extends PureComponent {
   constructor(props) {
     super(props);
+    this.adder = this.adder.bind(this)
+  }
+  adder() { 
+    const { addItem } = this.props.boundActionCreators;
+    addItem()
+    this.itemRow.focusFirstField()
   }
   componentDidMount() {
     const { rows, boundActionCreators } = this.props;
@@ -82,11 +88,14 @@ export class ItemsList extends PureComponent {
         item={item}
         t={t}
         products={this.props.products}
+        invoices={this.props.invoices}
         hasHandler={rows.length > 1}
+        onRef={(input) => { this.itemRow = input; }} 
         actions={index !== 0}
+        rows={this.props.rows}
         updateRow={updateItem}
         removeRow={removeItem}
-        addItem={addItem}
+        addItem={this.adder}
       />
     ));
 
@@ -103,7 +112,7 @@ export class ItemsList extends PureComponent {
             </TransitionList>
           </ItemsListDiv>
           <div className="itemsListActions">
-            <ItemsListActionsBtn primary onClick={addItem}>
+            <ItemsListActionsBtn primary onClick={this.adder}>
               {t('form:fields:items:add')}
             </ItemsListActionsBtn>
           </div>
@@ -122,7 +131,8 @@ ItemsList.propTypes = {
 const mapStateToProps = state => ({
   formState: state.form, // Make drag & drop works
   rows: getRows(state),
-  products: state.products
+  products: state.products,
+  invoices: state.invoices
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -70,7 +70,7 @@ export class NewProductRow extends Component {
   // Update local state
   handleInputChange(event) {
     this.setState({
-     isReel: 'yes'
+     isReel: event.target.value
     });
   }
 
