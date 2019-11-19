@@ -70,11 +70,11 @@ export class ItemsList extends PureComponent {
     this.itemRow.focusFirstField()
   }
   componentDidMount() {
-    const { rows, boundActionCreators } = this.props;
-    if (!rows.length) {
-      boundActionCreators.addItem();
-    }
-    this.props.onRef(this.props.boundActionCreators.addItem);
+    // const { rows, boundActionCreators } = this.props;
+    // if (!rows.length) {
+      // boundActionCreators.addItem();
+    // }
+    // this.props.onRef(this.props.boundActionCreators.addItem);
   }
 
   render() {

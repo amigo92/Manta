@@ -35,7 +35,7 @@ const allTabs = [
     icon: 'ion-person-stalker',
   },
   {
-    title: 'Products',
+    title: 'Chiththi',
     name: 'products',
     icon: 'ion-android-color-palette',
   },

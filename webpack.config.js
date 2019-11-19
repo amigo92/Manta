@@ -127,7 +127,7 @@ const commonConfig = merge([
 // EXPORT
 module.exports = env => {
   if (env && env.production) {
-    return merge(developmentConfig, commonConfig);
+    return merge(productionConfig, commonConfig);
   }
   return merge(developmentConfig, commonConfig);
 };

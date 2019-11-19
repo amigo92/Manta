@@ -11,6 +11,7 @@ import Settings from '../../containers/Settings';
 // Layout
 import { AppMainContent } from '../shared/Layout';
 import Products from '../../containers/Products';
+import List from '../../containers/List.jsx';
 
 class AppMain extends Component {
   shouldComponentUpdate(nextProps) {
@@ -25,7 +26,7 @@ class AppMain extends Component {
         {activeTab === 'invoices' && <Invoices />}
         {activeTab === 'contacts' && <Contacts />}
         {activeTab === 'products' && <Products />}
-        {activeTab === 'list' && <Products />}
+        {activeTab === 'list' && <List />}
         {activeTab === 'settings' && <Settings />}
       </AppMainContent>
     );

@@ -5,6 +5,7 @@ import InvoicesReducer from './InvoicesReducer';
 import ContactsReducer from './ContactsReducer';
 import ProductsReducer from './ProductsReducer';
 import SettingsReducer from './SettingsReducer';
+import ListReducer from './ListReducer';
 
 export default combineReducers({
   ui: UIReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   invoices: InvoicesReducer,
   contacts: ContactsReducer,
   products: ProductsReducer,
+  list: ListReducer,
   settings: SettingsReducer,
 });

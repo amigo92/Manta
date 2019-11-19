@@ -12,7 +12,8 @@ import * as FormActions from '../actions/form';
 
 // Helpers
 import { getInvoiceValue } from '../helpers/invoice';
-import { getAllDocs, getSingleDoc, saveDoc, deleteDoc, updateDoc } from '../helpers/pouchDB';
+import { getAllDocs, getSingleDoc, saveDoc, deleteDoc, updateDoc, updateDocById, deleteDocById } from '../helpers/pouchDB';
+
 
 const InvoicesMW = ({ dispatch, getState }) => next => action => {
   switch (action.type) {
@@ -58,6 +59,97 @@ const InvoicesMW = ({ dispatch, getState }) => next => action => {
             type: ACTION_TYPES.INVOICE_SAVE,
             payload: newDocs,
           });
+          const { invoices } = getState()
+          for (let i = invoices.length - 1; i >= 0; i--) { 
+            console.log(invoices[i])
+          }
+          // getAllDocs('listCreator')
+          //   .then(allDocs => {
+
+              
+              // if (allDocs.length) {
+                saveDoc('listCreator', action.payload).then(presentLists => {
+                  let listRowsArray = []
+                  let valuer = 0
+                  let docs = [...presentLists]
+                  let breaker = false
+                  for (var i = 0; i < docs.length; i++) {
+                    const doc = docs[i]
+                    for (var j = 0; j < doc.rows.length; j++) {
+                      const row = doc.rows[j]
+                      if (row.firkino != undefined && row.firkino != '') {
+                        row.distance = getState().products.filter(p =>  row.description == p.description)[0].distance
+                        listRowsArray.push({ id: row.id, firkino: row.firkino, distance: row.distance, invoiceID: Number(doc.invoiceID) })
+                        doc.rows.splice(j, 1)
+                        j -= 1
+                        valuer += row.distance
+                        if (valuer >= 5000 && valuer <= 5500) {
+                          breaker = true
+                        }
+                        if (breaker) {
+                          break
+                        }
+                      }
+                      console.log(doc)
+                    }
+                    if (!doc.rows.filter(r => typeof r.firkino == 'number' ).length) {
+                      docs.splice(i, 1)
+                      i -= 1
+                    }
+                    if (valuer >= 5000 && valuer <= 5500) {
+                      breaker = true
+                    }
+                    console.log(listRowsArray)
+                    if (breaker) {
+                      break
+                    }
+                  }
+                  if (breaker) {
+                    saveDoc('list', { list: listRowsArray,         
+                      created_at: Date.now(),
+                      _id: uuidv4(),
+                      _rev: null,
+                    })
+                    let deletedDocs = presentLists.filter(pL => { 
+                      return !docs.some(d => d._id == pL._id)
+                    })
+                    console.log(deletedDocs)
+                    const deleteDocsFromDb = async (docs) => {
+                      for (var i = 0; i < docs.length; i++) {
+                        const doc = docs[i]
+                        try {
+                          await deleteDocById('listCreator', doc._id)
+                        }
+                        catch (e) { 
+                          console.log(e)
+                        }
+                      }
+                    }
+                    const updateDocsFromDb = async (docs) => {
+                      for (var i = 0; i < docs.length; i++) {
+                        const doc = docs[i]
+                        try {
+                          await updateDocById('listCreator', doc._id,doc)
+                        }
+                        catch (e) { 
+                          console.log(e)
+                        }
+                      }
+                    }
+                    deleteDocsFromDb(deletedDocs)
+                    updateDocsFromDb(docs)
+                    // deletedDocs.map(pL => deleteDoc('listCreator', pL))
+                    // docs.map(d => updateDoc('listCreator',d))
+                  }
+                })
+              // }
+              // else { 
+              //   saveDoc('listCreator', action.payload).then(presentLists => {
+              //     console.log(presentLists)
+              //   })
+              // }
+              
+        // })
           dispatch({
             type: ACTION_TYPES.UI_NOTIFICATION_NEW,
             payload: {

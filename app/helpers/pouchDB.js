@@ -2,6 +2,9 @@
 const PouchDB = require('pouchdb-browser');
 const contactsDB = new PouchDB('contacts');
 const productsDB = new PouchDB('products');
+const listDB = new PouchDB('list');
+const listCreatorDB = new PouchDB('listCreator');
+
 const invoicesDB = new PouchDB('invoices');
 
 // Utility
@@ -127,6 +130,12 @@ const setDB = dbName =>
     if (dbName === 'products') {
       resolve(productsDB);
     }
+    if (dbName === 'list') {
+      resolve(listDB);
+    }
+    if (dbName === 'listCreator') {
+      resolve(listCreatorDB);
+    }
     if (dbName === 'invoices') {
       if (alreadyRunInvoiceMigration) {
         resolve(invoicesDB);
@@ -193,7 +202,18 @@ const deleteDoc = (dbName, doc) =>
       )
       .catch(err => reject(err));
   });
-
+const deleteDocById = (dbName, docID) => { 
+  getAllDocs(dbName).then(docs => {
+    return deleteDoc(dbName,docs.filter(d => docID == d._id)[0]._id)
+  })
+}
+const updateDocById = (dbName, docID, document) => { 
+  getAllDocs(dbName).then(docs => {
+    let doc = docs.filter(d => docID == d._id)[0]
+    doc.rows = document.rows
+    return updateDoc(dbName,doc)
+  })
+}
 // Update A Document
 const updateDoc = (dbName, updatedDoc) =>
   new Promise((resolve, reject) => {
@@ -206,4 +226,4 @@ const updateDoc = (dbName, updatedDoc) =>
       .catch(err => reject(err));
   });
 
-export { getAllDocs, getSingleDoc, deleteDoc, saveDoc, updateDoc };
+export { getAllDocs, getSingleDoc, deleteDoc, saveDoc, updateDoc, deleteDocById, updateDocById };

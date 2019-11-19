@@ -14,11 +14,12 @@ import FormMW from '../middlewares/FormMW';
 import ContactsMW from '../middlewares/ContactsMW';
 import ProductsMW from '../middlewares/ProductsMW';
 import InvoicesMW from '../middlewares/InvoicesMW';
+import ListMW from '../middlewares/ListMW';
 import SettingsMW from '../middlewares/SettingsMW';
 import UIMiddleware from '../middlewares/UIMiddleware';
 
 // Default Middlewares
-const middlewares = [FormMW, ContactsMW, ProductsMW, InvoicesMW, SettingsMW, UIMiddleware];
+const middlewares = [FormMW, ContactsMW, ProductsMW, InvoicesMW, ListMW, SettingsMW, UIMiddleware];
 
 // Dev Mode Middlewares
 if (isDev) {

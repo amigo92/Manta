@@ -11,6 +11,7 @@ import * as SettingsActions from './actions/settings';
 import * as InvoicesActions from './actions/invoices';
 import * as ContactsActions from './actions/contacts';
 import * as ProductsActions from './actions/products';
+import * as ListActions from './actions/list';
 
 // Components
 import AppNav from './components/layout/AppNav';
@@ -33,6 +34,7 @@ class App extends PureComponent {
     dispatch(ContactsActions.getAllContacts());
     dispatch(InvoicesActions.getInvoices());
     dispatch(ProductsActions.getAllProducts());
+    dispatch(ListActions.getAllList());
     dispatch(SettingsActions.getInitalSettings());
     // Add Event Listener
     ipc.on('menu-change-tab', (event, tabName) => {
