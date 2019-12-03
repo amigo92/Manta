@@ -27,6 +27,12 @@ export class InvoiceID extends PureComponent {
     super(props);
     this.state = { invoiceID: this.props.invoiceID };
     this.handleInputChange = this.handleInputChange.bind(this);
+    // this.props.updateFieldData('invoiceID', this.props.invoiceID);
+  }
+
+  componentDidMount() { 
+    // this.setState({ invoiceID: this.props.invoiceID }, () => {
+    // })
   }
 
   componentWillReceiveProps(nextProps) {

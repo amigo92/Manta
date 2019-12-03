@@ -59,7 +59,7 @@ class Form extends PureComponent {
     } = this.props.currentInvoice;
     let invoiceID = this.props.currentInvoice.invoiceID
     const sortedInvoices = this.props.invoices.sort((a, b) => { return a.invoiceID - b.invoiceID > 0 ? 1 : -1})
-      if (invoiceID == "") { 
+    if (invoiceID == "") { 
           invoiceID = String(sortedInvoices.length > 0 ? Number(sortedInvoices[sortedInvoices.length - 1].invoiceID) + 1 : 1000)
       }
     const { required_fields, open, editMode } = settings;

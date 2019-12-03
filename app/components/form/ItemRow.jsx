@@ -116,43 +116,46 @@ export class ItemRow extends Component {
     const product = this.props.products.filter(pr => pr.description == selectedOption.label);
     const quantity = this.state.description == selectedOption.label ? (this.state.quantity === '' ? 0 : parseFloat(this.state.quantity)) + 1 : 1
     const invoicesLength = this.props.invoices.length
-    let firkiNo
+    let firkiNo = this.props.item.firkino
     let shouldBreak = false
-    const reelProducts = this.props.products.filter(pr => pr.isReel && pr.isReel.toLowerCase() === 'yes');
-    if (reelProducts.filter(rP => rP.description == selectedOption.label).length > 0) {
-      if (this.props.rows.filter(r => r.firkino && r.firkino != '').length > 0) {
-        for (var j = this.props.rows.length - 1; j >= 0; j--) {
-          const rw = this.props.rows[j]
-          if (rw.firkino && rw.firkino != '') {
-            firkiNo = rw.firkino
-            shouldBreak = true
-            break;
-          }
-        }
-      }
-      else {
-        for (var i = invoicesLength - 1; i >= 0; i--) {
-          if (shouldBreak)
-            break
-          const inv = this.props.invoices[i]
-          for (var j = inv.rows.length - 1; j >= 0; j--) {
-            const rw = inv.rows[j]
-            if (rw.description == reelProducts[0].description && rw.firkino != '') {
+
+    if (!firkiNo || firkiNo == '') {
+      const reelProducts = this.props.products.filter(pr => pr.isReel && pr.isReel.toLowerCase() === 'yes');
+      if (reelProducts.filter(rP => rP.description == selectedOption.label).length > 0) {
+        if (this.props.rows.filter(r => r.firkino && r.firkino != '').length > 0) {
+          for (var j = this.props.rows.length - 1; j >= 0; j--) {
+            const rw = this.props.rows[j]
+            if (rw.firkino && rw.firkino != '') {
               firkiNo = rw.firkino
               shouldBreak = true
               break;
             }
           }
         }
+        else {
+          for (var i = invoicesLength - 1; i >= 0; i--) {
+            if (shouldBreak)
+              break
+            const inv = this.props.invoices[i]
+            for (var j = inv.rows.length - 1; j >= 0; j--) {
+              const rw = inv.rows[j]
+              if (rw.firkino && rw.firkino != '') {
+                firkiNo = rw.firkino
+                shouldBreak = true
+                break;
+              }
+            }
+          }
+        }
+        if (firkiNo) {
+          firkiNo += 1
+        }
+        else {
+          firkiNo = 1
+        }
+        console.log(firkiNo)
       }
-      if (firkiNo) {
-        firkiNo += 1
-      }
-      else { 
-        firkiNo = 1
-      }
-      console.log(firkiNo)
-  }
+    }
     product.length > 0 && this.setState(
       { selectedOption, description: selectedOption.label, price: product[0].price, quantity: quantity, firkino: firkiNo || '' },
       () => {

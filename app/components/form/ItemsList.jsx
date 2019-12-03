@@ -75,6 +75,7 @@ export class ItemsList extends PureComponent {
       // boundActionCreators.addItem();
     // }
     // this.props.onRef(this.props.boundActionCreators.addItem);
+    this.adder()
   }
 
   render() {
