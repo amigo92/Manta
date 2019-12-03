@@ -67,7 +67,7 @@ export class ItemsList extends PureComponent {
   adder() { 
     const { addItem } = this.props.boundActionCreators;
     addItem()
-    this.itemRow.focusFirstField()
+    this.itemRow && this.itemRow.focusFirstField()
   }
   componentDidMount() {
     // const { rows, boundActionCreators } = this.props;
