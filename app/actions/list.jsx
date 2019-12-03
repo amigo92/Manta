@@ -3,6 +3,7 @@ import { createAction } from 'redux-actions';
 
 // Get All Contacts
 export const getAllList = createAction(ACTION_TYPES.LIST_GET_ALL);
+export const getAllListCreator = createAction(ACTION_TYPES.CREATOR_LIST_GET_ALL);
 
 // Save A Contact
 export const saveList = createAction(

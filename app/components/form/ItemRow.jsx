@@ -118,9 +118,9 @@ export class ItemRow extends Component {
     const invoicesLength = this.props.invoices.length
     let firkiNo = this.props.item.firkino
     let shouldBreak = false
+    const reelProducts = this.props.products.filter(pr => pr.isReel && pr.isReel.toLowerCase() === 'yes');
 
     if (!firkiNo || firkiNo == '') {
-      const reelProducts = this.props.products.filter(pr => pr.isReel && pr.isReel.toLowerCase() === 'yes');
       if (reelProducts.filter(rP => rP.description == selectedOption.label).length > 0) {
         if (this.props.rows.filter(r => r.firkino && r.firkino != '').length > 0) {
           for (var j = this.props.rows.length - 1; j >= 0; j--) {
@@ -155,6 +155,9 @@ export class ItemRow extends Component {
         }
         console.log(firkiNo)
       }
+    }
+    if (reelProducts.filter(rP => rP.description == selectedOption.label).length == 0) { 
+      firkiNo = ''
     }
     product.length > 0 && this.setState(
       { selectedOption, description: selectedOption.label, price: product[0].price, quantity: quantity, firkino: firkiNo || '' },

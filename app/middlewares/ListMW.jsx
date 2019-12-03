@@ -29,7 +29,26 @@ const ListMW = ({ dispatch }) => next => action => {
           });
         });
     }
-
+    case ACTION_TYPES.CREATOR_LIST_GET_ALL: {
+      return getAllDocs('listCreator')
+        .then(allDocs => {
+          next(
+            Object.assign({}, action, {
+              payload: allDocs,
+            })
+          );
+        })
+        .catch(err => {
+          next({
+            type: ACTION_TYPES.UI_NOTIFICATION_NEW,
+            payload: {
+              type: 'warning',
+              message: err.message,
+            },
+          });
+        });
+    }
+    
     case ACTION_TYPES.LIST_SAVE: {
       return saveDoc('list', action.payload)
         .then(newDocs => {
@@ -37,6 +56,9 @@ const ListMW = ({ dispatch }) => next => action => {
             type: ACTION_TYPES.LIST_SAVE,
             payload: newDocs,
           });
+          dispatch({
+            type: ACTION_TYPES.CREATOR_LIST_GET_ALL
+          })
           dispatch({
             type: ACTION_TYPES.UI_NOTIFICATION_NEW,
             payload: {

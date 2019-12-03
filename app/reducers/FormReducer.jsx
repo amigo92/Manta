@@ -115,7 +115,10 @@ const FormReducer = handleActions(
           open: false,
         }),
       }),
-
+      [ACTION_TYPES.CREATOR_LIST_GET_ALL]: (state, action) =>
+      Object.assign({}, state, {
+        listCreator: action.payload,
+      }),
     [ACTION_TYPES.INVOICE_EDIT]: (state, action) => {
       const {
         invoiceID,

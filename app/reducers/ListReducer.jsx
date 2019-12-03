@@ -21,3 +21,9 @@ export const getList = createSelector(
   getListState,
   list => list
 );
+
+const getListCreatorState = state => state.form.listCreator;
+export const getListCreator = createSelector(
+  getListCreatorState,
+  listCreator => listCreator
+);

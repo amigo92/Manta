@@ -35,6 +35,7 @@ class App extends PureComponent {
     dispatch(InvoicesActions.getInvoices());
     dispatch(ProductsActions.getAllProducts());
     dispatch(ListActions.getAllList());
+    dispatch(ListActions.getAllListCreator());
     dispatch(SettingsActions.getInitalSettings());
     // Add Event Listener
     ipc.on('menu-change-tab', (event, tabName) => {

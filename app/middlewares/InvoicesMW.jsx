@@ -67,6 +67,9 @@ const InvoicesMW = ({ dispatch, getState }) => next => action => {
             payload: newDocs,
           });
           saveDoc('listCreator', action.payload).then(presentLists => {
+            dispatch({
+              type: ACTION_TYPES.CREATOR_LIST_GET_ALL
+            })
             const getAllFirkis = list => {
               const listRowsArray = [];
               const docs = [...list];

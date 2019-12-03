@@ -24,7 +24,7 @@ import {
 
 // Selectors
 import { getProducts } from '../reducers/ProductsReducer';
-import { getList } from '../reducers/ListReducer';
+import { getList, getListCreator } from '../reducers/ListReducer';
 
 // Component
 class Products extends PureComponent {
@@ -60,6 +60,7 @@ class Products extends PureComponent {
       <PageWrapper>
         <PageHeader>
           <PageHeaderTitle>All Lists</PageHeaderTitle>
+          <h3>{this.props.listCreator && this.props.listCreator.length}</h3>
         </PageHeader>
         <PageContent>
           {list.length === 0 ? (
@@ -93,6 +94,7 @@ Products.propTypes = {
 const mapStateToProps = state => ({
   products: getProducts(state),
   list: getList(state),
+  listCreator: getListCreator(state),
 });
 
 export default compose(
